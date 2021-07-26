@@ -26,31 +26,25 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
 
   bool isLoad = false;
   _onRefresh() async {
-    setState(() async {
-      isLoad = false;
-      List<Series> series = await Service.listarSeries();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarSeries(series: series)));
-    });
+    List<Series> series = await Service.listarSeries();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarSeries(series: series,)));
   }
 
 
-
+  bool isLoadAlert = false;
   _showAlertDialog(BuildContext context, String id) async {
-    AlertDialog dialog;
-    Widget cancelaButton = FlatButton(
-        child: Text("Cancelar"),
-        onPressed: () async
-        {
-          List<Series> series = await Service.listarSeries();
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => ListarSeries(series: series,)));
+    BuildContext dialog = context;
+    Widget cancelaButton  =  FlatButton(
+        child: (isLoadAlert == true) ? CircularProgressIndicator(backgroundColor: Colors.deepOrange,) : Text("Cancelar"),
+        onPressed: ()  {
+          Navigator.of(context).pop();
         }
     );
     Widget excluirButton = FlatButton(
       child: Text("Excluir"),
       onPressed:  () async {
-        await Service.deletarFilme(id);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+        await Service.deletarSerie(id);
+        Navigator.of(context).pop(MaterialPageRoute(builder: (context) => Home()));
       },
     );
     // configura o  AlertDialog
@@ -123,7 +117,7 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
                   Center(child: Text("Sem resultados", style: TextStyle(color: Colors.white),),) :
                   ListView.builder(
                     itemCount: widget.series.length,
-                    itemExtent: min(220, 400),
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.all(8.0),
@@ -154,8 +148,7 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
                                             List<Episodios> episodios = await Service.listarEpisodios(widget.series[index].IdSerie);
                                             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarEpisodios(series: widget.series[index], episodios: episodios,)));
                                           }),
-                                          //IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => EditarSerie(series: widget.series[index])));}),
-                                          IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => EditarSerie(series: widget.series[index])));}),
+                                          IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditarSerie(series: widget.series[index])));}),
                                           IconButton(icon: Icon(Icons.restore_from_trash),
                                               onPressed: () async {
                                                 _showAlertDialog(context, widget.series[index].IdSerie);

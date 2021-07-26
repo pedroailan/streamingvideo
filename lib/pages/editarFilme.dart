@@ -98,7 +98,7 @@ class _EditarFilmeState extends State<EditarFilme>{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-          title: Text("Filmes e Séries", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
+          title: Text("Editar Filme", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
       ),
       body: Padding(
         padding: EdgeInsets.all(15.0),
@@ -106,9 +106,9 @@ class _EditarFilmeState extends State<EditarFilme>{
           children: [
             TextBoxCadastrar(campo: "Título:", getText: _getTitulo, mask: null, value: widget.filme.Titulo,),
             TextBoxCadastrar(campo: "Sinopse:", getText: _getSinopse, mask: null, value: widget.filme.Sinopse),
-            TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno, value: widget.filme.Ano,),
-            TextBoxCadastrar(campo: "Data de Lançamento:", getText: _getDataLancamento, mask: maskData, value: widget.filme.DataLancamento,),
-            TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null, value: widget.filme.Generos.map((e) => e.Gen).join(",").toString(),),
+            TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno, value: widget.filme.Ano, hintText: "Ex: 2021", type: TextInputType.number,),
+            TextBoxCadastrar(campo: "Data de Lançamento:", getText: _getDataLancamento, mask: maskData, value: widget.filme.DataLancamento, hintText: "Ex: 12-12-2022", type: TextInputType.number,),
+            TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null, value: widget.filme.Generos.map((e) => e.Gen).join(",").toString(), hintText: "Ex: Terror, ação...",),
             Center(child: Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),))),
             SizedBox(height: 10,),
             BotaoAnimado(

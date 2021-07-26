@@ -87,10 +87,10 @@ class _CadastrarSerieState extends State<CadastrarSerie> {
             children: [
               TextBoxCadastrar(campo: "Título:", getText: _getTitulo, mask: null,),
               TextBoxCadastrar(campo: "Sinopse:", getText: _getSinopse, mask: null,),
-              TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno),
-              TextBoxCadastrar(campo: "Numero de temporada(s):", getText: _getNumeroTemporada, mask: null,),
-              TextBoxCadastrar(campo: "Ano Fim:", getText: _getAnoFim, mask: maskData,),
-              TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null,),
+              TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno, type: TextInputType.number,),
+              TextBoxCadastrar(campo: "Numero de temporada(s):", getText: _getNumeroTemporada, mask: null, type: TextInputType.number,),
+              TextBoxCadastrar(campo: "Ano Fim:", getText: _getAnoFim, mask: maskData, hintText: "Ex: 12-12-2022", type: TextInputType.number,),
+              TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null, hintText: "Ex: Terror, ação...",),
               Center(child: Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),))),
               SizedBox(height: 10,),
               BotaoAnimado(

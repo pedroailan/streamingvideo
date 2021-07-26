@@ -58,79 +58,147 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-            title: Text("Streaming Video", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
-            actions: [
-              IconButton(icon: Icon(Icons.logout), onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login())),),
-            ]
+    return Scaffold(
+      backgroundColor: Colors.deepOrange,
+      appBar: AppBar(
+        elevation: 5,
+        flexibleSpace: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              color: Colors.deepOrange,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  stops: [
+                    0.1,
+                    0.4,
+                    0.6,
+                    0.9,
+                  ],
+                  colors: [
+                    Colors.deepOrange,
+                    Colors.deepOrangeAccent,
+                    Colors.grey,
+                    Colors.black12,
+                  ],
+                )
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(18.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("   Streaming\n   Video", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                  IconButton(icon: Icon(Icons.logout), onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login())),),
+                ],
+              ),
+            )
         ),
-        body: Center(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          side: BorderSide(color: Colors.transparent)
+        ),
+        toolbarHeight: 150,
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.black,
+        shadowColor: Colors.black,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [
+                  0.1,
+                  0.4,
+                  0.6,
+                  0.9,
+                ],
+                colors: [
+                  Colors.deepOrange,
+                  Colors.deepOrangeAccent,
+                  Colors.black,
+                  Colors.black12,
+                ],
+              )
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                child: Card(
-                  elevation: 10,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: Colors.white, width: 0.5),
-                  ),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.movie_creation_outlined),
-                            Text(" Cadastrar Filme", style: TextStyle(color: Colors.deepOrange),),
-                          ],
-                        )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    child: Card(
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        //side: BorderSide(color: Colors.transparent, width: 0.5),
+                      ),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.movie_creation_outlined, color: Colors.white,),
+                              Text(" Cadastrar Filme", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                            ],
+                          )
+                      ),
                     ),
+                    onTap: () async {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CadastrarFilme()));
+                    },
                   ),
-                onTap: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CadastrarFilme()));
-                },
-              ),
-              InkWell(
-                child: Card(
-                  elevation: 10,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(color: Colors.white, width: 0.5),
+                  InkWell(
+                    child: Card(
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        //side: BorderSide(color: Colors.white, width: 0.5),
+                      ),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.movie, color: Colors.white,),
+                              Text(" Cadastrar Série", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                            ],
+                          )
+                      ),
+                    ),
+                    onTap: () async {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CadastrarSerie()));
+                    },
                   ),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.movie),
-                          Text(" Cadastrar Série", style: TextStyle(color: Colors.deepOrange),),
-                        ],
-                      )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BotaoAnimadoMenu(
+                    onPressed: _onPressed,
+                    tempo: 2,
+                    textoBotao: " Listar Filme",
+                    isLoad: isLoad,
+                    icone: Icons.list_alt,
                   ),
-                ),
-                onTap: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CadastrarSerie()));
-                },
-              ),
-              BotaoAnimadoMenu(
-                onPressed: _onPressed,
-                tempo: 2,
-                textoBotao: " Listar Filme",
-                isLoad: isLoad,
-              ),
-              BotaoAnimadoMenu(
-                onPressed: _onPressed2,
-                tempo: 2,
-                textoBotao: " Listar Série",
-                isLoad: isLoadSerie,
+                  BotaoAnimadoMenu(
+                    onPressed: _onPressed2,
+                    tempo: 2,
+                    textoBotao: " Listar Série",
+                    isLoad: isLoadSerie,
+                    icone: Icons.format_list_bulleted,
+                  ),
+                ],
               ),
             ],
           ),
@@ -145,47 +213,45 @@ class BotaoAnimadoMenu extends StatelessWidget {
   final bool isLoad;
   final int tempo;
   final String textoBotao;
+  final IconData icone;
 
-  BotaoAnimadoMenu({Key key,  this.onPressed, this.isLoad, this.tempo, this.textoBotao}) : super(key: key);
+  BotaoAnimadoMenu({Key key,  this.onPressed, this.isLoad, this.tempo, this.textoBotao, this.icone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 0, right: 0),
-      child: Card(
-        elevation: 1,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.white, width: 0.5),
-        ),
-        child: AnimatedContainer(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.1,
-            duration: Duration(seconds: tempo),
-            child: isLoad ?
-            Padding(
-              padding: EdgeInsets.only(left: 65, right: 65, top: 10, bottom: 10),
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrange),
-                strokeWidth: 2.0,
-              ),
-            )
-                :
-            FlatButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-              minWidth: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.movie_creation_outlined),
-                  Text(textoBotao, style: TextStyle(color: Colors.deepOrange),),
-                ],
-              ),
-              onPressed: onPressed,
-            )
-        ),
+    return Card(
+      elevation: 1,
+      color: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        //side: BorderSide(color: Colors.white, width: 0.5),
+      ),
+      child: AnimatedContainer(
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: MediaQuery.of(context).size.height * 0.2,
+          duration: Duration(seconds: tempo),
+          child: isLoad ?
+          Transform.scale(
+            scale: 0.4,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+              strokeWidth: 3.0,
+            ),
+          )
+              :
+          FlatButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            minWidth: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icone, color: Colors.white,),
+                Text(textoBotao, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              ],
+            ),
+            onPressed: onPressed,
+          )
       ),
     );
   }

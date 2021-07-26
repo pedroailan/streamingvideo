@@ -5,6 +5,7 @@ import 'package:streamingvideo/models/episodios.dart';
 import 'package:streamingvideo/models/filmes.dart';
 import 'package:streamingvideo/models/series.dart';
 import 'package:streamingvideo/pages/home.dart';
+import 'package:streamingvideo/pages/listarepisodios.dart';
 import 'package:streamingvideo/pages/listarfilmes.dart';
 import 'package:streamingvideo/services/mensagens.dart';
 import 'package:streamingvideo/services/services.dart';
@@ -51,8 +52,9 @@ class _CadastrarEpisodioState extends State<CadastrarEpisodio>{
         setState(() {
           isLoad = true;
         });
-        result = await Service.CadastrarEpisodio(titulo, sinopse, numero, temporada, widget.serie.IdSerie).then((value) {
-          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+        result = await Service.CadastrarEpisodio(titulo, sinopse, numero, temporada, widget.serie.IdSerie).then((value) async {
+          List<Episodios> ep = await Service.listarEpisodios(widget.serie.IdSerie);
+          if(value == true) Navigator.push(context, MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: ep,)));
           else {
             setState(() {
               isLoad = false;
@@ -83,7 +85,7 @@ class _CadastrarEpisodioState extends State<CadastrarEpisodio>{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text("Filmes e Séries", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
+        title: Text("Cadastrar Episodio", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
       ),
       body: Padding(
         padding: EdgeInsets.all(15.0),
@@ -91,8 +93,8 @@ class _CadastrarEpisodioState extends State<CadastrarEpisodio>{
           children: [
             TextBoxCadastrar(campo: "Título:", getText: _getTitulo, mask: null),
             TextBoxCadastrar(campo: "Sinopse:", getText: _getSinopse, mask: null),
-            TextBoxCadastrar(campo: "Temporada:", getText: _getTemporada, mask: null),
-            TextBoxCadastrar(campo: "Numero", getText: _getNumero, mask: null),
+            TextBoxCadastrar(campo: "Temporada:", getText: _getTemporada, mask: null, hintText: "Ex: 3", type: TextInputType.number,),
+            TextBoxCadastrar(campo: "Numero", getText: _getNumero, mask: null, hintText: "Ex: 2", type: TextInputType.number,),
 
             Center(child: Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),))),
             SizedBox(height: 10,),

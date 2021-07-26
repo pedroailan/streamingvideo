@@ -7,8 +7,10 @@ class TextBoxCadastrar extends StatelessWidget {
   final Function getText;
   final TextInputFormatter mask;
   final dynamic value;
+  final String hintText;
+  final TextInputType type;
 
-  TextBoxCadastrar({Key key, this.campo, this.getText, this.mask, this.value}) : super(key: key);
+  TextBoxCadastrar({Key key, this.campo, this.getText, this.mask, this.value, this.hintText, this.type}) : super(key: key);
 
 
   @override
@@ -28,6 +30,7 @@ class TextBoxCadastrar extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
             child: TextFormField(
+              keyboardType: type,
               initialValue: value,
               inputFormatters: [ mask != null ? mask : MaskTextInputFormatter(mask: "")],
               onChanged: (text) {
@@ -36,6 +39,8 @@ class TextBoxCadastrar extends StatelessWidget {
               style: TextStyle(fontSize: 20.0),
               //keyboardType: TextInputType.number,
               decoration: InputDecoration(
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                hintText: hintText,
                 contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
                 labelStyle: TextStyle(fontSize: 15.0),
                 border: UnderlineInputBorder(borderSide: BorderSide.none),

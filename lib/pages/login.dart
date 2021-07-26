@@ -97,119 +97,140 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     timeDilation = 1;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/logo-bd.png'),
-                // Text(
-                //   'LOGIN',
-                //   style: TextStyle(
-                //     color: Colors.blue[50],
-                //     fontWeight: FontWeight.bold,
-                //     fontSize: 20.0,
-                //   ),
-                // ),
-                Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),)),
-                SizedBox(height: 20),
-                Container(
-                  height: 70.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.transparent),
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                  child: TextField(
-                    onChanged: (text) {
-                      usuario = text;
-                    },
-                    style: TextStyle(fontSize: 20.0),
-                    //keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
-                      labelStyle: TextStyle(fontSize: 15.0),
-                      labelText: '    Usuário:',
-                      border: UnderlineInputBorder(borderSide: BorderSide.none),
-                      suffixIcon: Container(
-                        child: IconButton(
-                          padding: EdgeInsets.only(top: 10.0),
-                          icon: Icon(Icons.done,
-                            color: this.emailT ? Colors.green[700] : Colors.grey,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [
+                  0.1,
+                  0.4,
+                  0.6,
+                  0.9,
+                ],
+                colors: [
+                  Colors.black,
+                  Colors.blueGrey,
+                  Colors.deepOrange,
+                  Colors.black,
+                ],
+              )
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/logo-bd.png'),
+                  // Text(
+                  //   'LOGIN',
+                  //   style: TextStyle(
+                  //     color: Colors.blue[50],
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 20.0,
+                  //   ),
+                  // ),
+                  Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),)),
+                  SizedBox(height: 20),
+                  Container(
+                    height: 70.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.transparent),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: TextField(
+                      onChanged: (text) {
+                        usuario = text;
+                      },
+                      style: TextStyle(fontSize: 20.0),
+                      //keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
+                        labelStyle: TextStyle(fontSize: 15.0),
+                        labelText: '    Usuário:',
+                        border: UnderlineInputBorder(borderSide: BorderSide.none),
+                        suffixIcon: Container(
+                          child: IconButton(
+                            padding: EdgeInsets.only(top: 10.0),
+                            icon: Icon(Icons.done,
+                              color: this.emailT ? Colors.green[700] : Colors.grey,
+                            ),
+                            onPressed: () {},
                           ),
-                          onPressed: () {},
                         ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 10),
-                Container(
-                  height: 70.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.transparent),
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                  child: TextField(
-                    style: TextStyle(fontSize: 20.0),
-                    keyboardType: TextInputType.number,
-                    onChanged: (text) {
-                      senha = text;
-                    },
-                    obscureText: !this._showKey,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
-                      labelStyle: TextStyle(fontSize: 15.0),
-                      border: UnderlineInputBorder(borderSide: BorderSide.none),
-                      labelText: '    Senha:',
-                      suffixIcon: IconButton(
-                        padding: EdgeInsets.only(top: 20.0),
-                        icon: Icon(Icons.remove_red_eye,
-                          color: this._showKey ? Colors.green[700] : Colors.grey,
+                  SizedBox(height: 10),
+                  Container(
+                    height: 70.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.transparent),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: TextField(
+                      style: TextStyle(fontSize: 20.0),
+                      keyboardType: TextInputType.number,
+                      onChanged: (text) {
+                        senha = text;
+                      },
+                      obscureText: !this._showKey,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
+                        labelStyle: TextStyle(fontSize: 15.0),
+                        border: UnderlineInputBorder(borderSide: BorderSide.none),
+                        labelText: '    Senha:',
+                        suffixIcon: IconButton(
+                          padding: EdgeInsets.only(top: 20.0),
+                          icon: Icon(Icons.remove_red_eye,
+                            color: this._showKey ? Colors.green[700] : Colors.grey,
+                          ),
+                          onPressed: () { setState(() => this._showKey =! this._showKey);
+                          },
                         ),
-                        onPressed: () { setState(() => this._showKey =! this._showKey);
-                        },
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                BotaoAnimado(
-                  tempo: 1,
-                  onPressed: _onPressed,
-                  isLoad: isLoad,
-                  textoBotao: "ENTRAR",
-                ),
-                SizedBox(height: 20),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 50,
-                  child: InkWell(
-                    child: Center(
-                      child: Text(
-                        "Primeiro Acesso", style: TextStyle(
-                        fontSize: 18, color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PrimeiroAcesso()));
-                    },
+                  SizedBox(height: 20),
+                  BotaoAnimado(
+                    tempo: 1,
+                    onPressed: _onPressed,
+                    isLoad: isLoad,
+                    textoBotao: "ENTRAR",
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 50,
+                    child: InkWell(
+                      child: Center(
+                        child: Text(
+                          "Primeiro Acesso", style: TextStyle(
+                          fontSize: 18, color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PrimeiroAcesso()));
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      )
+        )
+      ),
     );
   }
 }

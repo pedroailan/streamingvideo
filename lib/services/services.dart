@@ -208,6 +208,7 @@ class Service {
     http.Response response;
     try {
       response = await http.get("https://streamingvideoapi.herokuapp.com/serie/find-all");
+      print(" --- Listar Series --- ");
       print("${response.headers} \n ${response.statusCode} \n ${response.body}");
 
       List<dynamic> dados = await json.decode(response.body);
@@ -222,7 +223,8 @@ class Service {
   static Future<Series> listarSeriePorId(int id) async {
     http.Response response;
     try {
-      response = await http.get("https://streamingvideoapi.herokuapp.com/filme/find-by-id/$id");
+      response = await http.get("https://streamingvideoapi.herokuapp.com/serie/find-by-id/$id");
+      print(" --- Listar Series Por ID --- ");
       print("${response.headers} \n ${response.statusCode} \n ${response.body}");
 
       Map<String, dynamic> dados = await json.decode(response.body);
@@ -237,9 +239,8 @@ class Service {
   static Future<bool> atualizarSerie(String id, String titulo, String sinopse, String ano, String numeroTemporada, String anoFim, String genero) async {
     String jsonResponse;
     int status;
-    print(titulo);
     try {
-      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/filme/update');
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/serie/update-serie');
       var response =
       await http.post(
         url,
@@ -249,19 +250,21 @@ class Service {
         },
         body:
         jsonEncode(<String, dynamic>{
+          'idSerie' : int.parse(id),
           'titulo' : titulo,
           'sinopse' : sinopse,
           'ano' : int.parse(ano),
           'numeroTemporada' : int.parse(numeroTemporada),
           'anoFim' : anoFim,
           'listaGenero' : genero,
-          'listaEpisodio' : [],
         }),
       );
       status = response.statusCode;
       jsonResponse = response.body;
+      print(" --- Atualizar Serie --- ");
       print("${response.headers} \n ${response.statusCode} \n ${response.body}");
     } catch (e) {
+      print(" --- Atualizar Serie --- ");
       print(e.toString());
     }
     if(status == 200) return true;
@@ -299,7 +302,8 @@ class Service {
     }
   }
 
-  static atualizarEpisodio(String idEpisodio, String titulo, String sinopse, String numero, String temporada, String idSerie) async {
+  static
+  atualizarEpisodio(String idEpisodio, String titulo, String sinopse, String numero, String temporada, String idSerie) async {
     String jsonResponse;
     int status;
     print(titulo);
@@ -383,5 +387,18 @@ class Service {
       return true;
     else
       return false;
+  }
+
+  static Future<bool> deletarSerie(String id) async {
+    http.Response response;
+    int idSerie = int.parse(id);
+    try {
+      response = await http.post("https://streamingvideoapi.herokuapp.com/serie/delete-serie/$idSerie");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (Exception) {
+      print(Exception);
+    }
+    if(response.statusCode == 200) return true;
+    else return false;
   }
 }

@@ -26,11 +26,8 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
 
   bool isLoad = false;
   _onRefresh() async {
-    setState(() async {
-      isLoad = false;
       List<Episodios> episodios = await Service.listarEpisodios(widget.series.IdSerie);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: episodios)));
-    });
   }
 
 
@@ -41,16 +38,14 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
         child: Text("Cancelar"),
         onPressed: () async
         {
-          List<Episodios> episodios = await Service.listarEpisodios(widget.series.IdSerie);
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: episodios,)));
+          Navigator.of(context).pop();
         }
     );
     Widget excluirButton = FlatButton(
       child: Text("Excluir"),
       onPressed:  () async {
         await Service.deletarEpisodio(id);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+        Navigator.of(context).pop(MaterialPageRoute(builder: (context) => Home()));
       },
     );
     // configura o  AlertDialog
@@ -131,7 +126,7 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
                   Center(child: Text("Sem resultados", style: TextStyle(color: Colors.white),),) :
                   ListView.builder(
                     itemCount: widget.episodios.length,
-                    itemExtent: min(200, 400),
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.all(8.0),

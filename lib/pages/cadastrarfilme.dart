@@ -47,7 +47,7 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
           isLoad = true;
         });
         result = await Service.cadastrarFilme(titulo, sinopse, ano, datalancamento, genero).then((value) {
-          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+          if(value == true) Navigator.pop(context, MaterialPageRoute(builder: (context) => Home()));
           else {
             setState(() {
               isLoad = false;
@@ -79,7 +79,7 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
       child: Scaffold( 
         backgroundColor: Colors.black,
         appBar: AppBar(
-            title: Text("Streaming Video", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
+            title: Text("Cadastrar Filme", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
         ),
         body: Padding(
           padding: EdgeInsets.all(15.0),
@@ -87,9 +87,9 @@ class _CadastrarFilmeState extends State<CadastrarFilme> {
             children: [
               TextBoxCadastrar(campo: "Título:", getText: _getTitulo, mask: null,),
               TextBoxCadastrar(campo: "Sinopse:", getText: _getSinopse, mask: null,),
-              TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno),
-              TextBoxCadastrar(campo: "Data de Lançamento:", getText: _getDataLancamento, mask: maskData,),
-              TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null,),
+              TextBoxCadastrar(campo: "Ano:", getText: _getAno, mask: maskAno, hintText: "Ex: 2021", type: TextInputType.number,),
+              TextBoxCadastrar(campo: "Data de Lançamento:", getText: _getDataLancamento, mask: maskData, hintText: "Ex: 12-12-2022", type: TextInputType.number,),
+              TextBoxCadastrar(campo: "Gênero:", getText: _getGenero, mask: null, hintText: "Ex: Terror, ação...", ),
               Center(child: Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),))),
               SizedBox(height: 10,),
               BotaoAnimado(

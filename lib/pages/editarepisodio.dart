@@ -4,6 +4,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:streamingvideo/models/episodios.dart';
 import 'package:streamingvideo/models/filmes.dart';
 import 'package:streamingvideo/pages/home.dart';
+import 'package:streamingvideo/pages/listarepisodios.dart';
 import 'package:streamingvideo/pages/listarfilmes.dart';
 import 'package:streamingvideo/services/mensagens.dart';
 import 'package:streamingvideo/services/services.dart';
@@ -60,8 +61,9 @@ class _EditarEpisodioState extends State<EditarEpisodio>{
         setState(() {
           isLoad = true;
         });
-        result = await Service.atualizarEpisodio(idEpisodio, titulo, sinopse, numero, temporada, widget.episodio.idSerie).then((value) {
-          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+        result = await Service.atualizarEpisodio(idEpisodio, titulo, sinopse, numero, temporada, widget.episodio.idSerie).then((value) async {
+          List<Episodios> eps = await Service.listarEpisodios(widget.episodio.idSerie);
+          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: eps,)));
           else {
             setState(() {
               isLoad = false;
@@ -92,7 +94,7 @@ class _EditarEpisodioState extends State<EditarEpisodio>{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text("Filmes e Séries", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
+        title: Text("Editar Episódio", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
       ),
       body: Padding(
         padding: EdgeInsets.all(15.0),
@@ -100,8 +102,8 @@ class _EditarEpisodioState extends State<EditarEpisodio>{
           children: [
             TextBoxCadastrar(campo: "Título:", getText: _getTitulo, mask: null, value: widget.episodio.Titulo,),
             TextBoxCadastrar(campo: "Sinopse:", getText: _getSinopse, mask: null, value: widget.episodio.Sinopse),
-            TextBoxCadastrar(campo: "Temporada:", getText: _getTemporada, mask: null, value: widget.episodio.Temporada,),
-            TextBoxCadastrar(campo: "Numero", getText: _getNumero, mask: null, value: widget.episodio.Numero,),
+            TextBoxCadastrar(campo: "Temporada:", getText: _getTemporada, mask: null, value: widget.episodio.Temporada, hintText: "Ex: 2", type: TextInputType.number,),
+            TextBoxCadastrar(campo: "Numero", getText: _getNumero, mask: null, value: widget.episodio.Numero, hintText: "Ex: 3", type: TextInputType.number,),
 
             Center(child: Visibility(visible: mensagemTag, child: Text(mensagem, style: TextStyle(color: Colors.white),))),
             SizedBox(height: 10,),
