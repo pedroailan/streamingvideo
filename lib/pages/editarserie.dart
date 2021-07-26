@@ -64,11 +64,15 @@ class _EditarSerieState extends State<EditarSerie>{
     if(numeroTemporada == null || numeroTemporada.isEmpty) numeroTemporada = atual.NumeroTemporada;
     if(anoFim == null || numeroTemporada.isEmpty) anoFim = atual.AnoFim;
     if(genero == null || genero.isEmpty) genero = atual.Generos.map((e) => e.Gen).join(",");
-    List<Series> listaS = await Service.listarSeries();
+
     if(titulo.isNotEmpty && sinopse.isNotEmpty && ano.isNotEmpty && numeroTemporada.isNotEmpty){
       try{
-        result = await Service.atualizarSerie(idSerie, titulo, sinopse, ano, numeroTemporada, anoFim, genero).then((value) {
-          if(value == true) Navigator.pop(context, MaterialPageRoute(builder: (context) => ListarSeries(series: listaS)));
+        result = await Service.atualizarSerie(idSerie, titulo, sinopse, ano, numeroTemporada, anoFim, genero).then((value) async {
+          if(value == true) {
+            await Service.listarSeries().then((value) {
+              Navigator.pop(context, MaterialPageRoute(builder: (context) => ListarSeries(series: value)));
+            });
+          }
           else {
             setState(() {
               isLoad = false;

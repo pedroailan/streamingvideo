@@ -378,8 +378,7 @@ class Service {
       );
       status = response.statusCode;
       jsonResponse = response.body;
-      print(
-          "${response.headers} \n ${response.statusCode} \n ${response.body}");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
     } catch (e) {
       print(e.toString());
     }

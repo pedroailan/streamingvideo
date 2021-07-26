@@ -86,12 +86,12 @@ class _HomeState extends State<Home> {
                 )
             ),
             child: Padding(
-              padding: EdgeInsets.all(18.0),
+              padding: EdgeInsets.only(left: 40, top: 20, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("   Streaming\n   Video", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
-                  IconButton(icon: Icon(Icons.logout), onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login())),),
+                  IconButton(icon: Icon(Icons.logout, color: Colors.white,), onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login())),),
                 ],
               ),
             )
@@ -104,6 +104,18 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.black,
         shadowColor: Colors.black,
+      ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.black,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -120,8 +132,8 @@ class _HomeState extends State<Home> {
                 ],
                 colors: [
                   Colors.deepOrange,
+                  Colors.deepOrange,
                   Colors.deepOrangeAccent,
-                  Colors.black,
                   Colors.black12,
                 ],
               )
@@ -130,6 +142,7 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

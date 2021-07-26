@@ -30,7 +30,6 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarSeries(series: series,)));
   }
 
-
   bool isLoadAlert = false;
   _showAlertDialog(BuildContext context, String id) async {
     BuildContext dialog = context;
@@ -43,8 +42,8 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
     Widget excluirButton = FlatButton(
       child: Text("Excluir"),
       onPressed:  () async {
+        Navigator.of(context).pop();
         await Service.deletarSerie(id);
-        Navigator.of(context).pop(MaterialPageRoute(builder: (context) => Home()));
       },
     );
     // configura o  AlertDialog
@@ -65,6 +64,7 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
     );
   }
 
+  var isLoadButton = "false";
 
   @override
   Widget build(BuildContext context) {
@@ -74,40 +74,6 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
           appBar: AppBar(
             title: Text("Séries", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
           ),
-          /*drawer: Drawer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // DrawerHeader(
-              //   decoration: BoxDecoration(),
-              //       child: IconButton(icon: Icon(Icons.account_circle_outlined), iconSize: 50,),
-              //     ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: dataList.length,
-                  itemExtent: 80,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: (){},
-                      child: Card(
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.deepOrange),
-                          child: Center(
-                              child: ListTile(
-                                title: Text(dataList[index]),
-                                leading: IconButton(icon: Icon(Icons.arrow_forward_ios_sharp), onPressed: (){},),
-                              )
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),*/
           body: RefreshIndicator(
             onRefresh: () => _onRefresh(),
             child: Column(
@@ -144,11 +110,25 @@ class _ListarSeriesState extends State<ListarSeries> with SingleTickerProviderSt
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
+                                          isLoadButton   == "true" + [index].toString() ? Transform.scale(
+                                            scale: 0.4,
+                                            child: CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                              strokeWidth: 3.0,
+                                            ),
+                                          )
+                                              :
                                           IconButton(icon: Icon(Icons.list), onPressed: () async {
+                                            setState(() {
+                                              isLoadButton = "true" + [index].toString();
+                                            });
                                             List<Episodios> episodios = await Service.listarEpisodios(widget.series[index].IdSerie);
-                                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarEpisodios(series: widget.series[index], episodios: episodios,)));
+                                            setState(() {
+                                              isLoadButton = "false" + [index].toString();
+                                            });
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ListarEpisodios(series: widget.series[index], episodios: episodios,)));
                                           }),
-                                          IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditarSerie(series: widget.series[index])));}),
+                                          IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => EditarSerie(series: widget.series[index])));}),
                                           IconButton(icon: Icon(Icons.restore_from_trash),
                                               onPressed: () async {
                                                 _showAlertDialog(context, widget.series[index].IdSerie);

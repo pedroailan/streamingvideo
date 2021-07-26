@@ -54,7 +54,7 @@ class _CadastrarEpisodioState extends State<CadastrarEpisodio>{
         });
         result = await Service.CadastrarEpisodio(titulo, sinopse, numero, temporada, widget.serie.IdSerie).then((value) async {
           List<Episodios> ep = await Service.listarEpisodios(widget.serie.IdSerie);
-          if(value == true) Navigator.push(context, MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: ep,)));
+          if(value == true) Navigator.pop(context, MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: ep,)));
           else {
             setState(() {
               isLoad = false;

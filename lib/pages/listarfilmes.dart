@@ -26,7 +26,7 @@ class _ListarFilmesState extends State<ListarFilmes> {
   bool isLoad = false;
   _onRefresh() async {
       List<Filmes> filmes = await Service.listarFilmes();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ListarFilmes(filmes: filmes,)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ListarFilmes(filmes: filmes,)));
   }
 
 
@@ -42,8 +42,8 @@ class _ListarFilmesState extends State<ListarFilmes> {
     Widget excluirButton = FlatButton(
       child: Text("Excluir"),
       onPressed:  () async {
+        Navigator.of(context).pop();
         await Service.deletarFilme(id);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       },
     );
     // configura o  AlertDialog

@@ -49,6 +49,9 @@ class _EditarFilmeState extends State<EditarFilme>{
 
 
   _onPressed () async {
+    setState(() {
+      isLoad = true;
+    });
     var result;
     if(idFilme == null || idFilme.isEmpty) idFilme = widget.filme.idFilme;
     Filmes atual = await Service.listarFilmePorId(int.parse(widget.filme.idFilme));
@@ -59,15 +62,12 @@ class _EditarFilmeState extends State<EditarFilme>{
     if(datalancamento == null || datalancamento.isEmpty) datalancamento = atual.DataLancamento;
     if(genero == null || genero.isEmpty) genero = atual.Generos.map((e) => e.Gen).join(",");
 
-    print(idFilme);
+
     if(titulo.isNotEmpty && sinopse.isNotEmpty && ano.isNotEmpty && datalancamento.isNotEmpty){
       try{
-        setState(() {
-          isLoad = true;
-        });
-        result = await Service.atualizarFilme(idFilme, titulo, sinopse, ano, datalancamento, genero).then((value) {
-          print(value);
-          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+        result = await Service.atualizarFilme(idFilme, titulo, sinopse, ano, datalancamento, genero).then((value) async {
+          List<Filmes> atual = await Service.listarFilmes();
+          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ListarFilmes(filmes: atual,)));
           else {
             setState(() {
               isLoad = false;
