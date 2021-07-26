@@ -19,6 +19,7 @@ class _PrimeiroAcessoState extends State<PrimeiroAcesso> {
 
   String usuario = '';
   String senha = '';
+  String nome = '';
   bool emailT = false;
   bool _showKey = false;
   String tag = '';
@@ -28,12 +29,12 @@ class _PrimeiroAcessoState extends State<PrimeiroAcesso> {
 
   _onPressed () async {
     var result;
-    if(usuario.isNotEmpty && senha.isNotEmpty){
+    if(usuario.isNotEmpty && senha.isNotEmpty && nome.isNotEmpty){
       try{
         setState(() {
           isLoad = true;
         });
-        result = await Service.cadastrarUsuario(usuario, senha).whenComplete(() {
+        result = await Service.cadastrarUsuario(usuario, nome, senha).whenComplete(() {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
         });
       } catch (Exception) {
@@ -42,7 +43,7 @@ class _PrimeiroAcessoState extends State<PrimeiroAcesso> {
           mensagem = result.status == 500 ?  Mensagens.errorServidor : '';
           mensagemTag = true;
         });
-        Exception.toString();
+        print(Exception.toString());
       }
     } else {
       setState(() {
@@ -90,19 +91,31 @@ class _PrimeiroAcessoState extends State<PrimeiroAcesso> {
                         labelStyle: TextStyle(fontSize: 15.0),
                         labelText: '    Usuário:',
                         border: UnderlineInputBorder(borderSide: BorderSide.none),
-                        suffixIcon: Container(
-                          child: IconButton(
-                            padding: EdgeInsets.only(top: 10.0),
-                            icon: Icon(Icons.done,
-                              color: this.emailT ? Colors.green[700] : Colors.grey,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
                       ),
                     ),
                   ),
-
+                  SizedBox(height: 10),
+                  Container(
+                    height: 70.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.transparent),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: TextField(
+                      onChanged: (text) {
+                        nome = text;
+                      },
+                      style: TextStyle(fontSize: 20.0),
+                      //keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
+                        labelStyle: TextStyle(fontSize: 15.0),
+                        labelText: '    Nome:',
+                        border: UnderlineInputBorder(borderSide: BorderSide.none),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 10),
                   Container(
                     height: 70.0,

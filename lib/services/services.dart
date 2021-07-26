@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:streamingvideo/models/episodios.dart';
+import 'package:streamingvideo/models/filmes.dart';
+import 'package:streamingvideo/models/series.dart';
 import 'package:streamingvideo/pages/listarfilmes.dart';
 
 class Service {
@@ -28,19 +32,13 @@ class Service {
     } catch (e) {
       print(e.toString());
     }
-    return new Filmes (
-    status: status,
-    duracao: jsonResponse,
-    descricao: jsonResponse,
-    id: 0,
-    );
   }
 
-  static Future<bool> cadastrarUsuario(String usuario, String senha) async {
+  static Future<bool> cadastrarUsuario(String usuario, String nome, String senha) async {
     String jsonResponse;
     int status;
     try {
-      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/usuario/autenticar');
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/usuario/insert');
       var response =
       await http.post(
         url,
@@ -49,9 +47,11 @@ class Service {
           'Charset': 'utf-8'
         },
         body:
-        jsonEncode(<String, String>{
-          'email' : usuario,
+        jsonEncode(<String, dynamic>{
+          'login' : usuario,
+          'nome' : nome,
           'senha' : senha,
+          'administrador' : true,
         }),
       );
       status = response.statusCode;
@@ -65,8 +65,9 @@ class Service {
   static Future<bool> cadastrarFilme(String titulo, String sinopse, String ano, String datalancamento, String genero) async {
     String jsonResponse;
     int status;
+    print(titulo);
     try {
-      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/usuario/autenticar');
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/filme/insert');
       var response =
           await http.post(
         url,
@@ -75,12 +76,12 @@ class Service {
           'Charset': 'utf-8'
         },
         body:
-        jsonEncode(<String, String>{
+        jsonEncode(<String, dynamic>{
           'titulo' : titulo,
           'sinopse' : sinopse,
-          'ano' : ano,
-          'datalancamento' : datalancamento,
-          'genero' : genero
+          'ano' : int.parse(ano),
+          'dataLancamento' : datalancamento,
+          'listaGenero' : genero,
         }),
       );
       status = response.statusCode;
@@ -89,7 +90,197 @@ class Service {
     } catch (e) {
       print(e.toString());
     }
-    if(jsonResponse == "true") return true;
+    if(status == 200) return true;
     else return false;
+  }
+
+  static Future<List<Filmes>> listarFilmes() async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/filme/find-all/");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      List<dynamic> dados = await json.decode(response.body);
+      List<Filmes> filmes = dados.map((filme) => Filmes.fromJson(filme)).toList();
+      return filmes;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
+  }
+
+  static Future<bool> atualizarFilme(String id, String titulo, String sinopse, String ano, String datalancamento, String genero) async {
+    String jsonResponse;
+    int status;
+    print(titulo);
+    try {
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/filme/update');
+      var response =
+          await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8'
+        },
+        body:
+        jsonEncode(<String, dynamic>{
+          'idTitulo' : int.parse(id),
+          'titulo' : titulo,
+          'sinopse' : sinopse,
+          'ano' : int.parse(ano),
+          'dataLancamento' : datalancamento,
+          'listaGenero' : genero,
+        }),
+      );
+      status = response.statusCode;
+      jsonResponse = response.body;
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (e) {
+      print(e.toString());
+    }
+    if(status == 200) return true;
+    else return false;
+
+  }
+
+  static Future<Filmes> listarFilmePorId(int id) async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/filme/find-by-id/$id");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      Map<String, dynamic> dados = await json.decode(response.body);
+      Filmes filme = Filmes.fromJson(dados);
+      return filme;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
+  }
+
+  static Future<bool> deletarFilme(String id) async {
+    http.Response response;
+    int idtitulo = int.parse(id);
+    try {
+      response = await http.post("https://streamingvideoapi.herokuapp.com/filme/delete/$idtitulo");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (Exception) {
+      print(Exception);
+    }
+    if(response.statusCode == 200) return true;
+    else return false;
+  }
+
+  static Future<bool> cadastrarSerie(String titulo, String sinopse, String ano, String numeroTemporada, String anoFim, String genero) async {
+    String jsonResponse;
+    int status;
+    try {
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/serie/insert-serie');
+      var response =
+      await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8'
+        },
+        body:
+        jsonEncode(<String, dynamic>{
+          'titulo' : titulo,
+          'sinopse' : sinopse,
+          'ano' : int.parse(ano),
+          'numeroTemporada' : int.parse(numeroTemporada),
+          'anoFim' : anoFim,
+          'listaGenero' : genero,
+          'listaEpisodio' : [],
+        }),
+      );
+      status = response.statusCode;
+      jsonResponse = response.body;
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (e) {
+      print(e.toString());
+    }
+    if(status == 200) return true;
+    else return false;
+  }
+
+  static Future<List<Series>> listarSeries() async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/serie/find-all");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      List<dynamic> dados = await json.decode(response.body);
+      List<Series> series = dados.map((serie) => Series.fromJson(serie)).toList();
+      return series;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
+  }
+
+  static Future<Series> listarSeriePorId(int id) async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/filme/find-by-id/$id");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      Map<String, dynamic> dados = await json.decode(response.body);
+      Series serie = Series.fromJson(dados);
+      return serie;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
+  }
+
+  static Future<bool> atualizarSerie(String id, String titulo, String sinopse, String ano, String numeroTemporada, String anoFim, String genero) async {
+    String jsonResponse;
+    int status;
+    print(titulo);
+    try {
+      var url = Uri.parse('https://streamingvideoapi.herokuapp.com/filme/update');
+      var response =
+      await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8'
+        },
+        body:
+        jsonEncode(<String, dynamic>{
+          'titulo' : titulo,
+          'sinopse' : sinopse,
+          'ano' : int.parse(ano),
+          'numeroTemporada' : int.parse(numeroTemporada),
+          'anoFim' : anoFim,
+          'listaGenero' : genero,
+          'listaEpisodio' : [],
+        }),
+      );
+      status = response.statusCode;
+      jsonResponse = response.body;
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (e) {
+      print(e.toString());
+    }
+    if(status == 200) return true;
+    else return false;
+
+  }
+
+  static Future<List<Episodios>> listarEpisodios(String idSerie) async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/serie/find-episodio-by-id-serie/$idSerie");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      List<dynamic> dados = await json.decode(response.body);
+      List<Episodios> episodios = dados.map((e) => Episodios.fromJson(e)).toList();
+      return episodios;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
   }
 }
