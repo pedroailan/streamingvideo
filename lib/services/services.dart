@@ -283,4 +283,105 @@ class Service {
       return null;
     }
   }
+
+  static Future<Episodios> listarEpisodioPorId(int idEpisodio) async {
+    http.Response response;
+    try {
+      response = await http.get("https://streamingvideoapi.herokuapp.com/serie/find-episodio-by-id/$idEpisodio");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+
+      Map<String, dynamic> dados = await json.decode(response.body);
+      Episodios episodio = Episodios.fromJson(dados);
+      return episodio;
+    } catch (Exception) {
+      print(Exception);
+      return null;
+    }
+  }
+
+  static atualizarEpisodio(String idEpisodio, String titulo, String sinopse, String numero, String temporada, String idSerie) async {
+    String jsonResponse;
+    int status;
+    print(titulo);
+    try {
+      var url = Uri.parse(
+          'https://streamingvideoapi.herokuapp.com/serie/update-episodio');
+      var response =
+      await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8'
+        },
+        body:
+        jsonEncode(<String, dynamic>{
+          "idEpisodio": idEpisodio,
+          "numero": numero,
+          "titulo": titulo,
+          "sinopse": sinopse,
+          "temporada": temporada,
+          "idSerie": idSerie,
+        }),
+      );
+      status = response.statusCode;
+      jsonResponse = response.body;
+      print(
+          "${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (e) {
+      print(e.toString());
+    }
+    if (status == 200)
+      return true;
+    else
+      return false;
+  }
+
+  static deletarEpisodio(idEpisodio) async {
+    http.Response response;
+    int idEp = int.parse(idEpisodio);
+    try {
+      response = await http.post("https://streamingvideoapi.herokuapp.com/serie/delete-episodio/$idEp");
+      print("${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (Exception) {
+      print(Exception);
+    }
+    if(response.statusCode == 200) return true;
+    else return false;
+  }
+
+  static CadastrarEpisodio(String titulo, String sinopse, String numero, String temporada, String idSerie) async {
+    String jsonResponse;
+    int status;
+    print(titulo);
+    try {
+      var url = Uri.parse(
+          'https://streamingvideoapi.herokuapp.com/serie/insert-episodio');
+      var response =
+          await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8'
+        },
+        body:
+        jsonEncode(<String, dynamic>{
+          "numero": numero,
+          "titulo": titulo,
+          "sinopse": sinopse,
+          "temporada": temporada,
+          "idSerie": idSerie,
+        }),
+      );
+      status = response.statusCode;
+      jsonResponse = response.body;
+      print(
+          "${response.headers} \n ${response.statusCode} \n ${response.body}");
+    } catch (e) {
+      print(e.toString());
+    }
+    if (status == 200)
+      return true;
+    else
+      return false;
+  }
 }

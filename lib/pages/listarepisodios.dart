@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:streamingvideo/models/episodios.dart';
 import 'package:streamingvideo/models/series.dart';
+import 'package:streamingvideo/pages/cadastrarepisodio.dart';
+import 'package:streamingvideo/pages/editarepisodio.dart';
 import 'package:streamingvideo/pages/editarserie.dart';
 import 'package:streamingvideo/pages/home.dart';
 import 'package:streamingvideo/services/services.dart';
@@ -47,7 +49,7 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
     Widget excluirButton = FlatButton(
       child: Text("Excluir"),
       onPressed:  () async {
-        await Service.deletarFilme(id);
+        await Service.deletarEpisodio(id);
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       },
     );
@@ -77,6 +79,14 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
           backgroundColor: Colors.black,
           appBar: AppBar(
             title: Text("Episódios", style: TextStyle(color: Colors.deepOrange),), backgroundColor: Colors.black,
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.white, size: 30,), onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CadastrarEpisodio(serie: widget.series)));
+                }),
+              ),
+            ],
           ),
           /*drawer: Drawer(
           child: Column(
@@ -121,7 +131,7 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
                   Center(child: Text("Sem resultados", style: TextStyle(color: Colors.white),),) :
                   ListView.builder(
                     itemCount: widget.episodios.length,
-                    itemExtent: min(220, 400),
+                    itemExtent: min(200, 400),
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.all(8.0),
@@ -144,7 +154,7 @@ class _ListarEpisodiosState extends State<ListarEpisodios> with SingleTickerProv
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          //IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => EditarEpisodio(series: widget.episodios[index].idEpisodio)));}),
+                                          IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => EditarEpisodio(episodio: widget.episodios[index])));}),
                                           IconButton(icon: Icon(Icons.restore_from_trash),
                                               onPressed: () async {
                                                 _showAlertDialog(context, widget.episodios[index].idEpisodio);
