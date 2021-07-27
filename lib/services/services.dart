@@ -369,11 +369,11 @@ class Service {
         },
         body:
         jsonEncode(<String, dynamic>{
-          "numero": numero,
+          "numero": int.parse(numero),
           "titulo": titulo,
           "sinopse": sinopse,
-          "temporada": temporada,
-          "idSerie": idSerie,
+          "temporada": int.parse(temporada),
+          "idSerie": int.parse(idSerie),
         }),
       );
       status = response.statusCode;

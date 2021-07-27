@@ -7,6 +7,7 @@ import 'package:streamingvideo/models/series.dart';
 import 'package:streamingvideo/pages/home.dart';
 import 'package:streamingvideo/pages/listarepisodios.dart';
 import 'package:streamingvideo/pages/listarfilmes.dart';
+import 'package:streamingvideo/pages/listarseries.dart';
 import 'package:streamingvideo/services/mensagens.dart';
 import 'package:streamingvideo/services/services.dart';
 import 'package:streamingvideo/utils/botaoanimado.dart';
@@ -47,14 +48,15 @@ class _CadastrarEpisodioState extends State<CadastrarEpisodio>{
 
   _onPressed () async {
     var result;
+
     if(titulo.isNotEmpty && sinopse.isNotEmpty && temporada.isNotEmpty && numero.isNotEmpty){
       try{
         setState(() {
           isLoad = true;
         });
         result = await Service.CadastrarEpisodio(titulo, sinopse, numero, temporada, widget.serie.IdSerie).then((value) async {
-          List<Episodios> ep = await Service.listarEpisodios(widget.serie.IdSerie);
-          if(value == true) Navigator.pop(context, MaterialPageRoute(builder: (context) => ListarEpisodios(episodios: ep,)));
+          List<Series> series = await Service.listarSeries();
+          if(value == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ListarSeries(series: series,)));
           else {
             setState(() {
               isLoad = false;
