@@ -1,4 +1,4 @@
-# streamingvideo
+Aplicação feita para realização do projeto prático de banco de dados, no qual será possivel realizar CRUDS para uma API em Spring.
 
 A new Flutter application.
 
